@@ -5,496 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Natura — Documentaires Animaliers</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --earth: #1a1209;
-    --moss: #2d3a1e;
-    --sage: #7a9e6e;
-    --ochre: #c8913a;
-    --ivory: #f5f0e8;
-    --dust: #b8ab96;
-    --cream: #ede8dc;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background-color: var(--earth);
-    color: var(--ivory);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-    cursor: default;
-  }
-
-  /* ---- GRAIN OVERLAY ---- */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-    opacity: 0.4;
-    pointer-events: none;
-    z-index: 999;
-  }
-
-  /* ---- HERO ---- */
-  .hero {
-    position: relative;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 30% 60%, #2d4a1a 0%, #1a1209 60%);
-  }
-
-  /* animated particles */
-  .particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
-  .particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: var(--sage);
-    border-radius: 50%;
-    opacity: 0;
-    animation: float-up var(--dur) var(--delay) infinite ease-in;
-  }
-  @keyframes float-up {
-    0%   { transform: translateY(0) translateX(0); opacity: 0; }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.2; }
-    100% { transform: translateY(-80vh) translateX(var(--drift)); opacity: 0; }
-  }
-
-  .hero-content {
-    position: relative;
-    text-align: center;
-    padding: 2rem;
-    animation: fade-in 1.4s ease both;
-  }
-
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--sage);
-    margin-bottom: 1.2rem;
-    animation: fade-in 1.4s 0.2s ease both;
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 9vw, 8rem);
-    line-height: 0.9;
-    font-weight: 700;
-    color: var(--ivory);
-    margin-bottom: 1.5rem;
-    animation: fade-in 1.4s 0.4s ease both;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--ochre);
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-    font-weight: 300;
-    color: var(--dust);
-    max-width: 480px;
-    margin: 0 auto 3rem;
-    line-height: 1.7;
-    animation: fade-in 1.4s 0.6s ease both;
-  }
-
-  .hero-cta {
-    display: inline-block;
-    padding: 0.9rem 2.5rem;
-    border: 1px solid var(--ochre);
-    color: var(--ochre);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    animation: fade-in 1.4s 0.8s ease both;
-  }
-  .hero-cta:hover {
-    background: var(--ochre);
-    color: var(--earth);
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 2.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--dust);
-    opacity: 0.5;
-    animation: fade-in 2s 1.5s ease both;
-  }
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, transparent, var(--dust));
-    animation: scroll-bounce 1.8s ease-in-out infinite;
-  }
-  @keyframes scroll-bounce {
-    0%, 100% { transform: scaleY(1); }
-    50%       { transform: scaleY(0.5); transform-origin: top; }
-  }
-
-  /* ---- SECTION HEADING ---- */
-  .section {
-    padding: 8rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--sage);
-    margin-bottom: 0.8rem;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    color: var(--ivory);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .section-title em {
-    font-style: italic;
-    color: var(--ochre);
-  }
-
-  .section-desc {
-    font-weight: 300;
-    color: var(--dust);
-    max-width: 520px;
-    line-height: 1.8;
-    font-size: 0.95rem;
-  }
-
-  /* ---- FEATURED ---- */
-  .featured-grid {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 1.5rem;
-    margin-top: 4rem;
-  }
-
-  .doc-card {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    background: var(--moss);
-  }
-
-  .doc-card-inner {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .doc-card-img {
-    width: 100%;
-    aspect-ratio: 16/10;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.7s ease;
-    filter: saturate(0.7) brightness(0.85);
-  }
-
-  .doc-card:hover .doc-card-img {
-    transform: scale(1.06);
-    filter: saturate(0.9) brightness(0.95);
-  }
-
-  .doc-card-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(10,8,3,0.9) 0%, transparent 55%);
-    pointer-events: none;
-  }
-
-  .doc-card-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.8rem;
-  }
-
-  .doc-tag {
-    display: inline-block;
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--ochre);
-    margin-bottom: 0.5rem;
-    border: 1px solid rgba(200,145,58,0.4);
-    padding: 0.2rem 0.6rem;
-  }
-
-  .doc-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--ivory);
-    line-height: 1.25;
-    margin-bottom: 0.4rem;
-  }
-
-  .doc-meta {
-    font-size: 0.75rem;
-    color: var(--dust);
-    font-weight: 300;
-  }
-
-  .doc-card.small .doc-card-img { aspect-ratio: 4/3; }
-  .doc-card.small .doc-title    { font-size: 1.1rem; }
-
-  /* ---- HORIZONTAL LIST ---- */
-  .list-section {
-    border-top: 1px solid rgba(255,255,255,0.07);
-    padding: 8rem 2rem;
-  }
-
-  .list-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .doc-list {
-    margin-top: 3.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .doc-row {
-    display: grid;
-    grid-template-columns: 60px 2fr 1fr 80px;
-    align-items: center;
-    gap: 2rem;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    transition: background 0.25s;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .doc-row:hover { background: rgba(255,255,255,0.03); }
-
-  .doc-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.2);
-    font-style: italic;
-  }
-
-  .doc-row-info h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--ivory);
-    margin-bottom: 0.2rem;
-  }
-
-  .doc-row-info p {
-    font-size: 0.78rem;
-    color: var(--dust);
-    font-weight: 300;
-  }
-
-  .doc-row-type {
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--sage);
-  }
-
-  .doc-row-year {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.3);
-    text-align: right;
-  }
-
-  /* ---- QUOTE ---- */
-  .quote-section {
-    text-align: center;
-    padding: 6rem 2rem;
-    background: var(--moss);
-    border-top: 1px solid rgba(255,255,255,0.04);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-
-  blockquote {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.3rem, 3vw, 2rem);
-    font-style: italic;
-    color: var(--ivory);
-    max-width: 720px;
-    margin: 0 auto 1.5rem;
-    line-height: 1.6;
-  }
-
-  cite {
-    font-size: 0.75rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--dust);
-    font-style: normal;
-  }
-
-  /* ---- FOOTER ---- */
-  footer {
-    padding: 4rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-
-  .footer-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: var(--ochre);
-    font-style: italic;
-  }
-
-  .footer-note {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.2);
-    text-align: right;
-    line-height: 1.6;
-  }
-
-  /* ---- HIDDEN BUTTON ---- */
-  /* 🎯 Le bouton secret : il se fond dans le décor comme un animal camouflé.
-     Il ressemble exactement au numéro d'index d'une ligne du tableau.
-     Hover = il révèle sa vraie nature. */
-  #hidden-btn {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Playfair Display', serif;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.2); /* identique aux numéros normaux */
-    font-style: italic;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.2rem 0;
-    transition: color 0.4s, text-shadow 0.4s;
-    width: 60px;
-    text-align: left;
-    outline: none;
-  }
-
-  #hidden-btn:hover {
-    color: var(--ochre);
-    text-shadow: 0 0 20px rgba(200,145,58,0.6);
-  }
-
-  /* ---- MODAL ---- */
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(10,8,3,0.92);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s;
-  }
-  .modal-backdrop.active {
-    opacity: 1;
-    pointer-events: all;
-  }
-  .modal {
-    background: var(--moss);
-    border: 1px solid rgba(200,145,58,0.3);
-    padding: 3rem;
-    max-width: 440px;
-    text-align: center;
-    transform: translateY(20px);
-    transition: transform 0.4s;
-  }
-  .modal-backdrop.active .modal {
-    transform: translateY(0);
-  }
-  .modal-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-  .modal h2 {
-    font-family: 'Playfair Display', serif;
-    color: var(--ochre);
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-  }
-  .modal p {
-    color: var(--dust);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-  }
-  .modal-close {
-    padding: 0.7rem 2rem;
-    border: 1px solid var(--sage);
-    background: none;
-    color: var(--sage);
-    cursor: pointer;
-    font-size: 0.78rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    transition: all 0.3s;
-  }
-  .modal-close:hover {
-    background: var(--sage);
-    color: var(--earth);
-  }
-
-  /* ---- RESPONSIVE ---- */
-  @media (max-width: 768px) {
-    .featured-grid { grid-template-columns: 1fr; }
-    .doc-row { grid-template-columns: 50px 1fr; }
-    .doc-row-type, .doc-row-year { display: none; }
-    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
-    .footer-note { text-align: center; }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -507,7 +18,7 @@
   <div class="hero-content">
     <p class="eyebrow">Sélection Éditoriale</p>
     <h1 class="hero-title">Na<em>tura</em></h1>
-    <p class="hero-subtitle">Une collection de documentaires animaliers qui capturent la beauté sauvage, la violence douce et les mystères de la nature vivante.</p>
+    <p class="hero-subtitle">Une collection de documentaires animaliers qui capturent la beauté sauvage (grrrhhhh), la violence douce (pas le bdsm dcp) et les mystères de la nature vivante (ou pas).</p>
     <a href="#selection" class="hero-cta">Découvrir la sélection</a>
   </div>
   <div class="scroll-hint">
@@ -521,7 +32,7 @@
   <div class="section">
     <p class="section-label">À la une</p>
     <h2 class="section-title">Les <em>incontournables</em></h2>
-    <p class="section-desc">Des œuvres qui ont redéfini notre regard sur le monde animal. Tournés aux quatre coins du globe, souvent sur des années de patience.</p>
+    <p class="section-desc">Des œuvres qui ont redéfini notre regard sur le monde animal. Tournés aux quatre coins du zob, souvent sur des années de patience.</p>
 
     <div class="featured-grid">
       <!-- Card 1 -->
@@ -530,15 +41,15 @@
           <img class="doc-card-img" src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=900&q=80" alt="Planet Earth">
           <div class="doc-card-overlay"></div>
           <div class="doc-card-content">
-            <span class="doc-tag">BBC Nature</span>
+            <span class="doc-tag">BBC Mature</span>
             <h3 class="doc-title">Planet Earth III</h3>
-            <p class="doc-meta">David Attenborough · 2023 · 8 épisodes</p>
+            <p class="doc-meta">Sam Gratlécouy · 2023 · 8 épisodes</p>
           </div>
         </div>
       </div>
 
       <!-- Column of 2 small cards -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; overflow: hidden; height: 100%;">
         <div class="doc-card small">
           <div class="doc-card-inner">
             <img class="doc-card-img" src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80" alt="Our Planet">
@@ -595,7 +106,7 @@
       </div>
 
       <!-- ROW 03: contient le bouton caché 🎯 -->
-      <div class="doc-row" style="position: relative;">
+      <div class="doc-row">
         <!-- Le bouton secret se cache en se faisant passer pour le numéro "03" -->
         <button id="hidden-btn" title="" onclick="openModal()">03</button>
         <div class="doc-row-info">
@@ -643,7 +154,7 @@
 <!-- QUOTE -->
 <section class="quote-section">
   <blockquote>
-    "No one will protect what they don't care about; and no one will care about what they have never experienced."
+    "No one will protect what they don't care about; and no one will care about what they have never fucked."
   </blockquote>
   <cite>— David Attenborough</cite>
 </section>
@@ -662,9 +173,13 @@
     <div class="modal-icon">🐾</div>
     <h2>Vous l'avez trouvé !</h2>
     <p>
-      Comme un animal camouflé dans son habitat, ce bouton se cachait en pleine vue — 
-      déguisé en simple numéro de liste. Bravo pour votre œil de naturaliste&nbsp;!
+      Comme un chatte camouflé dans son matelat, ce bouton se cachait en pleine vue
+      <br>
+      Bravo pour votre œil de naturaliste !
+      <br>
+      Voici le cadeau : un accès exclusif à notre doculmentaire bonus, "Le Terrier profond" — une plongée dans les coulisses de la pénétration du terrier de la taupe, préparez-vous à découvrir un monde caché juste ta langue.
     </p>
+    <a href="https://xgroovy-fr.com/pornstars/the-sex-creator/" target="_blank" class="mon-bouton">Visiter le site</a>
     <button class="modal-close" onclick="closeModal()">Refermer le terrier</button>
   </div>
 </div>
