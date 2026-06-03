@@ -511,6 +511,11 @@
     color: var(--earth);
   }
 
+  .porn-star:hover {
+    color: 0 0 10px rgb(255, 159, 4);
+    text-shadow: 0 0 10px rgb(255, 185, 73);
+  }
+  
   .mon-bouton {
   display: inline-block;
   padding: 0.8rem 2rem;
